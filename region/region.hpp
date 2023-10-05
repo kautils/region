@@ -16,7 +16,7 @@ struct region{
         for(auto i = from ;i < data_size;){
             auto write_size = i+extend_size+buffer; 
             write_size = (write_size < data_size)*buffer + !(write_size < data_size)*( buffer -(write_size-data_size)); 
-            prf->write(i+extend_size,i,write_size);
+            prf->shift(i+extend_size,i,write_size);
             i+=buffer;
         }
     }
