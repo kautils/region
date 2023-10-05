@@ -16,7 +16,7 @@ file(GLOB srcs ${CMAKE_CURRENT_LIST_DIR}/*.cc)
 set(${module_name}_common_pref
     MODULE_PREFIX kautil
     MODULE_NAME ${module_name}
-    INCLUDES $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}> $<INSTALL_INTERFACE:include>  
+    INCLUDES $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include> $<INSTALL_INTERFACE:include>   
     SOURCES ${srcs}
     EXPORT_NAME_PREFIX ${PROJECT_NAME}
     EXPORT_VERSION ${PROJECT_VERSION}
@@ -40,6 +40,12 @@ add_executable(${__t})
 target_sources(${__t} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/unit_test.cc)
 target_link_libraries(${__t} PRIVATE ${${module_name}_interface})
 target_compile_definitions(${__t} PRIVATE ${${module_name}_interface_tmain_ppcs})
+
+
+if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/include/kautil/region")
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/kautil)
+    file(CREATE_LINK ${CMAKE_CURRENT_LIST_DIR} "${CMAKE_CURRENT_LIST_DIR}/include/kautil/region" SYMBOLIC)
+endif()
 
 
 foreach(__v ${${m}_unsetter})
