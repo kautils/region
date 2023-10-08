@@ -20,6 +20,23 @@ struct region{
             i+=buffer;
         }
     }
+    
+    void shrink(offset_type begin,offset_type shrink_size,offset_type write_buffer_size){
+        auto end = prf->size();
+        auto write_size = end-begin;
+        auto new_size = end+shrink_size;
+        {
+            for(auto i = begin; i < end; ){
+                write_size = (write_size > write_buffer_size)*write_buffer_size + !(write_size > write_buffer_size)*write_size;
+                prf->shift(begin+shrink_size,i,write_size);
+                i+=write_size;
+            }
+        }
+        prf->extend(shrink_size);
+
+    }
+
+    
 };
 
 
