@@ -29,11 +29,12 @@ struct region{
         auto eof = prf->size();
         auto write_size = eof-from;
         write_size = (write_size > write_buffer_size)*write_buffer_size + !(write_size > write_buffer_size)*write_size;
+        auto is_overflow=false;
         for(auto i = from; i < eof; i+=write_size){
-            auto is_overflow=(i+write_size>=eof);
             auto src = !is_overflow*i + is_overflow*(eof-1);
             prf->shift(src-shrink_size,src,write_size);
             //printf("%d %d %d \n",src-shrink_size,src,write_size);fflush(stdout);
+            is_overflow=(i+write_size>=eof);
         }
         prf->extend(-shrink_size);
     }
