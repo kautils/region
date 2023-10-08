@@ -13,12 +13,8 @@ struct region{
     void claim(offset_type from,offset_type extend_size,offset_type buffer){
         
         prf->extend(extend_size);
-        auto data_size = prf->size();
         auto current_data_size = prf->size()-extend_size;
-
-        auto write_size = extend_size; 
-        write_size = (write_size < buffer)*write_size + !(write_size < buffer)*buffer; 
-        
+        auto write_size = (extend_size < buffer)*extend_size + !(extend_size < buffer)*buffer; 
         auto cur = offset_type(-1);
         for(auto i = offset_type(current_data_size);cur;i-=write_size){
             cur = offset_type(i-write_size);
