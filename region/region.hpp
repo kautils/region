@@ -33,7 +33,7 @@ struct region{
             auto is_overflow=(i+write_size>=eof);
             auto src = !is_overflow*i + is_overflow*(eof-1);
             prf->shift(src-shrink_size,src,write_size);
-            printf("%d %d %d \n",src-shrink_size,src,write_size);fflush(stdout);
+            //printf("%d %d %d \n",src-shrink_size,src,write_size);fflush(stdout);
         }
         prf->extend(-shrink_size);
     }
