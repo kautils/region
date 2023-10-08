@@ -11,7 +11,6 @@ struct region{
     region(pref * prf) : prf(prf){}
     ~region(){}
     void claim(offset_type from,offset_type extend_size,offset_type buffer){
-        
         prf->extend(extend_size);
         auto current_data_size = prf->size()-extend_size;
         auto write_size = (extend_size < buffer)*extend_size + !(extend_size < buffer)*buffer; 
@@ -24,18 +23,16 @@ struct region{
             prf->shift(cur+extend_size,cur,write_size);
             if(!cur) break;
         }
-        
     }
-    
     
     void shrink(offset_type from,offset_type shrink_size,offset_type write_buffer_size){
         auto eof = prf->size();
         auto write_size = eof-from;
-        auto new_size = eof-shrink_size;
-        for(auto i = from; i < eof; ){
-            write_size = (write_size > write_buffer_size)*write_buffer_size + !(write_size > write_buffer_size)*write_size;
-            prf->shift(i-shrink_size,i,write_size);
-            i+=write_size;
+        write_size = (write_size > write_buffer_size+from)*write_buffer_size + !(write_size > write_buffer_size)*write_size;
+        for(auto i = from; i < eof; i+=write_size){
+            auto is_overflow=(i+write_size>=eof);
+            auto src = !is_overflow*i + is_overflow*(eof-1);
+            prf->shift(src-shrink_size,src,write_size);
         }
         prf->extend(-shrink_size);
     }
