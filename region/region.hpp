@@ -35,7 +35,7 @@ struct region{
         {
             for(auto i = begin; i < end; ){
                 write_size = (write_size > write_buffer_size)*write_buffer_size + !(write_size > write_buffer_size)*write_size;
-                prf->shift(begin+shrink_size,i,write_size);
+                prf->shift(i+shrink_size,i,write_size);
                 i+=write_size;
             }
         }
