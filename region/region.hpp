@@ -15,13 +15,16 @@ struct region{
         prf->extend(extend_size);
         auto current_data_size = prf->size()-extend_size;
         auto write_size = (extend_size < buffer)*extend_size + !(extend_size < buffer)*buffer; 
-        auto cur = offset_type(-1);
-        for(auto i = offset_type(current_data_size);cur;i-=write_size){
-            cur = offset_type(i-write_size);
-            write_size=(cur<0)*(cur+write_size) + !(cur<0)*write_size;
-            cur = !(cur<0)*cur;
+        for(auto i = offset_type(current_data_size);;i-=write_size){
+            auto is_overflow = i<write_size;
+            auto cur = !is_overflow*(i-write_size);
+            write_size=
+                     !is_overflow*write_size
+                    + is_overflow*(write_size-(-i+write_size));
             prf->shift(cur+extend_size,cur,write_size);
+            if(!cur) break;
         }
+        
     }
     
     
