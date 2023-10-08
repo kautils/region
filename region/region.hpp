@@ -21,7 +21,8 @@ struct region{
         
         for(auto i = offset_type(current_data_size);;i-=write_size){
             auto cur = offset_type(i-write_size);
-            if(cur<0){ write_size+=cur;cur =0; }
+            write_size=(cur<0)*(cur+write_size) + !(cur<0)*write_size;
+            cur = !(cur<0)*cur;
             prf->shift(cur+extend_size,cur,write_size);
             if(!cur) break;
         }
