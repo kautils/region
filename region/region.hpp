@@ -19,12 +19,12 @@ struct region{
         auto write_size = extend_size; 
         write_size = (write_size < buffer)*write_size + !(write_size < buffer)*buffer; 
         
-        for(auto i = offset_type(current_data_size);;i-=write_size){
-            auto cur = offset_type(i-write_size);
+        auto cur = offset_type(-1);
+        for(auto i = offset_type(current_data_size);cur;i-=write_size){
+            cur = offset_type(i-write_size);
             write_size=(cur<0)*(cur+write_size) + !(cur<0)*write_size;
             cur = !(cur<0)*cur;
             prf->shift(cur+extend_size,cur,write_size);
-            if(!cur) break;
         }
     }
     
