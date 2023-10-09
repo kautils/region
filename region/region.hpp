@@ -16,17 +16,18 @@ struct region{
         prf->extend(extend_size);
         auto current_data_size = prf->size()-extend_size;
 
+        //auto is_overflow = false;
         auto write_size = (buffer<current_data_size-from)*buffer + !(buffer<current_data_size-from)*(current_data_size-from);
         for(auto i = offset_type(current_data_size);;i-=write_size){
             auto is_overflow = i < from+write_size;
-            auto cur = !is_overflow*(i-write_size);
+            auto cur = !is_overflow*(i-write_size) + is_overflow*from;
             write_size=
                      !is_overflow*write_size
                     + is_overflow*(write_size-(-i+write_size));
             
-            printf("%ld\n",cur+extend_size);fflush(stdout);
+            printf("%ld %ld\n",cur+extend_size,cur);fflush(stdout);
             prf->shift(cur+extend_size,cur,write_size);
-            if(!cur) break;
+            if(is_overflow)break;
         }
     }
     
