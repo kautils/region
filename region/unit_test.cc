@@ -93,7 +93,7 @@ int main(){
         auto from = 0;
         auto extend_size = 100;
         auto buffer = 128;
-        auto reg = region<syscall_pref>{&prf};
+        auto reg = kautil::region<syscall_pref>{&prf};
         reg.claim(from,extend_size,buffer);
         
         auto c = '0';

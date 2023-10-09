@@ -2,6 +2,8 @@
 #define KAUTIL_REGION_REGION_REGION_HPP
 
 
+namespace kautil{
+
 template<typename pref>
 struct region{
     
@@ -13,13 +15,16 @@ struct region{
     void claim(offset_type from,offset_type extend_size,offset_type buffer){
         prf->extend(extend_size);
         auto current_data_size = prf->size()-extend_size;
-        auto write_size = (extend_size < buffer)*extend_size + !(extend_size < buffer)*buffer; 
+
+        auto write_size = (buffer<current_data_size-from)*buffer + !(buffer<current_data_size-from)*(current_data_size-from);
         for(auto i = offset_type(current_data_size);;i-=write_size){
-            auto is_overflow = i<write_size;
+            auto is_overflow = i < from+write_size;
             auto cur = !is_overflow*(i-write_size);
             write_size=
                      !is_overflow*write_size
                     + is_overflow*(write_size-(-i+write_size));
+            
+            printf("%ld\n",cur+extend_size);fflush(stdout);
             prf->shift(cur+extend_size,cur,write_size);
             if(!cur) break;
         }
@@ -33,7 +38,6 @@ struct region{
         for(auto i = from; i < eof; i+=write_size){
             auto src = !is_overflow*i + is_overflow*(eof-1);
             prf->shift(src-shrink_size,src,write_size);
-            //printf("%d %d %d \n",src-shrink_size,src,write_size);fflush(stdout);
             is_overflow=(i+write_size>=eof);
         }
         prf->extend(-shrink_size);
@@ -42,6 +46,7 @@ struct region{
     
 };
 
+}// kautil
 
 
 
