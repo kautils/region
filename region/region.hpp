@@ -25,7 +25,7 @@ struct region{
                      !is_overflow*write_size
                     + is_overflow*(write_size-(-i+write_size));
             
-            printf("%ld %ld\n",cur+extend_size,cur);fflush(stdout);
+            //printf("%ld %ld\n",cur+extend_size,cur);fflush(stdout);
             prf->shift(cur+extend_size,cur,write_size);
             if(is_overflow)break;
         }

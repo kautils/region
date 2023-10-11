@@ -29,9 +29,9 @@ int main(){
 
         auto from = 0;
         auto extend_size = 100;
-        auto buffer = 4096;
+        auto buffer_size = 4096;
         auto reg = region<memory_pref>{&prf};
-        reg.claim(from,extend_size,buffer);
+        reg.claim(from,extend_size,buffer_size);
 
         for(auto i = 0; i < extend_size;++i)data[from+i] = '0';
         auto cnt = 0;
@@ -65,24 +65,24 @@ int main(){
         struct syscall_pref{
             using offset_type = long;
             int fd = -1;
-            char * buffer = 0;
+            char * buffer_size = 0;
             offset_type buffer_size = 0;
             struct stat st;
             
-            ~syscall_pref(){ free(buffer); }
+            ~syscall_pref(){ free(buffer_size); }
             void extend(offset_type extend_size){ 
                 fstat(fd,&st);
                 ftruncate(fd,st.st_size+extend_size);
             }
             int write(offset_type dst,offset_type src,offset_type size){
                 if(buffer_size < size){
-                    if(buffer)free(buffer);
-                    buffer = (char*) malloc(buffer_size = size);
+                    if(buffer_size)free(buffer_size);
+                    buffer_size = (char*) malloc(buffer_size = size);
                 }
                 lseek(fd,src,SEEK_SET);
-                ::read(fd,buffer,size);
+                ::read(fd,buffer_size,size);
                 lseek(fd,dst,SEEK_SET);
-                ::write(fd,buffer,size);
+                ::write(fd,buffer_size,size);
                 return 0;
             }
             
@@ -94,9 +94,9 @@ int main(){
         
         auto from = 0;
         auto extend_size = 100;
-        auto buffer = 4096;
+        auto buffer_size = 4096;
         auto reg = region<syscall_pref>{&prf};
-        reg.claim(from,extend_size,buffer);
+        reg.claim(from,extend_size,buffer_size);
         
         auto c = '0';
         for(auto i = 0; i< extend_size; ++i){
