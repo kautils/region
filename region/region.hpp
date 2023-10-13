@@ -25,7 +25,8 @@ struct region{
             auto cur = !is_overflow*(i-write_size) + is_overflow*from;
             write_size=
                      !is_overflow*write_size
-                    + is_overflow*(write_size-(-i+write_size));
+                    + is_overflow*(i-from);
+                    //+ is_overflow*(write_size-(-i+write_size));
             
             //printf("%ld %ld\n",cur+extend_size,cur);fflush(stdout);
             prf->shift(cur+extend_size,cur,write_size);
