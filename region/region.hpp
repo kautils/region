@@ -13,7 +13,7 @@ struct region{
     region(pref * prf) : prf(prf){}
     ~region(){}
     void claim(offset_type from,offset_type extend_size,offset_type buffer){
-        prf->extend(extend_size);
+        auto ext_res=prf->extend(extend_size);
         auto current_data_size = (prf->size()>extend_size)*(prf->size()-extend_size);
 
         //auto is_overflow = false;

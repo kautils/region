@@ -67,9 +67,9 @@ int main(){
             struct stat st;
             
             ~syscall_pref(){ free(buffer); }
-            void extend(offset_type extend_size){ 
+            int extend(offset_type extend_size){ 
                 fstat(fd,&st);
-                ftruncate(fd,st.st_size+extend_size);
+                return ftruncate(fd,st.st_size+extend_size);
             }
             int shift(offset_type dst,offset_type src,offset_type size){
                 if(buffer_size < size){
