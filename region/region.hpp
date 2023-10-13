@@ -17,7 +17,9 @@ struct region{
         auto current_data_size = prf->size()-extend_size;
 
         //auto is_overflow = false;
-        auto write_size = (buffer<current_data_size-from)*buffer + !(buffer<current_data_size-from)*(current_data_size-from);
+        auto write_size = 
+                  bool(current_data_size)*((buffer<current_data_size-from)*buffer + !(buffer<current_data_size-from)*(current_data_size-from))
+                +!bool(current_data_size)*extend_size;
         for(auto i = offset_type(current_data_size);;i-=write_size){
             auto is_overflow = i < from+write_size;
             auto cur = !is_overflow*(i-write_size) + is_overflow*from;
