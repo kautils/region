@@ -1,6 +1,8 @@
 #ifndef KAUTIL_REGION_REGION_REGION_HPP
 #define KAUTIL_REGION_REGION_REGION_HPP
 
+#include <error.h>
+#include <stdio.h>
 
 namespace kautil{
 
@@ -35,7 +37,7 @@ struct region{
         return 0;
     }
     
-    void shrink(offset_type from,offset_type shrink_size,offset_type write_buffer_size){
+    int shrink(offset_type from,offset_type shrink_size,offset_type write_buffer_size){
         auto eof = prf->size();
         auto write_size = eof-from;
         write_size = (write_size > write_buffer_size)*write_buffer_size + !(write_size > write_buffer_size)*write_size;
@@ -45,7 +47,7 @@ struct region{
             prf->shift(src-shrink_size,src,write_size);
             is_overflow=(i+write_size>=eof);
         }
-        prf->extend(-shrink_size);
+        return !prf->extend(-shrink_size);
     }
 
     
